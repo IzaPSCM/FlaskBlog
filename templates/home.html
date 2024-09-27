@@ -1,19 +1,28 @@
 {# Insere o template `layout.html` nesta página #}
 {% extends "layout.html" %}
 
-{# Bloco dentro de <article></article> #}
-
+{# Bloco dentro de <article></article> de 'layout.html' #}
 {% block article %}
 
-<!-- Conteudo fake de teste → REMOVA-ME!!!! -->
-<h2>Título do Article</h2>
+<h2>Artigos recentes</h2>
 
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit eum, dolor ad alias nesciunt consequuntur in error enim numquam sit sunt! Quia eius tempora provident tempore culpa cupiditate sunt dignissimos?</p>
-<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Autem qui voluptatum hic repudiandae labore quod deleniti temporibus perferendis quisquam recusandae, eum alias natus, dolor at! Error saepe est cupiditate consectetur!</p>
-<img src="https://picsum.photos/200/300" alt="Imagem aleatória">
-<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eligendi consequatur laboriosam reiciendis dolorem, exercitationem dolor natus hic quisquam itaque maxime doloribus. Adipisci debitis quod perferendis repudiandae similique quam voluptatum eveniet.</p>
-<h4>Links:</h4>
-<ul>
+{% for article in page.articles %}
+-- Recebe a lista de artigos do banco de dados:
+-- A) Somente os campos necessários
+-- B) Somente artigos online
+-- C) Somente artigos do presente e do passado (agendamento)
+-- D) Ordenados pela data, com mais recente primeiro
+
+-- A -- 
+SELECT art_id, art_title,art_resume,art_thumbnail
+		FROM 'article'
+-- B -- 
+WHERE art_status = 'on'
+-- C -- 
+	AND art_date <= NOW()
+-- D --
+ORDER BY art_date DESC;
+
     <li><a href="https://catabist.com.br">Site do Fessô</a></li>
     <li><a href="https://github.com/Luferat">Github do fessô</a></li>
 </ul>
