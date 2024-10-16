@@ -39,7 +39,7 @@ def home():  # Função executada quando '/' é acessado
         # Nome da folha de estilos desta página (opcional)
         'css': 'home.css',
         # Nome do JavaScript desta página (opcional)
-        'js': 'home.js',
+        # 'js': 'home.js',
         # Outros pares "chave" : "valor" entram aqui
         'articles': articles
     }
@@ -52,6 +52,9 @@ def home():  # Função executada quando '/' é acessado
 # Rota que exibe o artigo completo
 @app.route('/view/<artid>')
 def view(artid):
+
+    # Obtém a variável 'ac' para mostrar feedback
+    ac = request.args.get('ac')
 
     # Se o Id do artigo não é um número, exibe erro 404
     if not artid.isdigit():
@@ -89,21 +92,22 @@ def view(artid):
     toPage = {
         'title': '',
         'css': 'view.css',
-        'article': article,  # Passa o artigo para a view.html
-        'articles': articles
+        'article': article,     # Passa o artigo para a view.html
+        'articles': articles,   # Lista de outros artigos do autor
+        'action': ac            # Feedback de envio do comentário
     }
 
     return render_template('view.html', page=toPage)
 
 
-# Define a rota para a URL '/contatos'
+# Define a rota para a URL '/contatos' usando métodos GET e POST
 @app.route('/contacts', methods=['GET', 'POST'])
 def contacts():  # Função executada quando '/contacts' é acessado
 
-    # Formulário não enviado
+    # Formulário não enviado por padrão
     success = False
 
-    # Primeiro nome do remetente
+    # Primeiro nome do remetente em branco
     first = ''
 
     # Se o formulário foi enviado
@@ -112,6 +116,7 @@ def contacts():  # Função executada quando '/contacts' é acessado
         # Recebe os dados do front-end (form)
         form = dict(request.form)
 
+        # DEBUG → Testa de os dados do form foram recebidos
         # print('\n\n\n', form, '\n\n\n')
 
         # Salva contato no banco de dados
@@ -142,6 +147,7 @@ def page_not_found(e):
     }
     return render_template('404.html', page=toPage), 404
 
+
 @app.route('/comment', methods=['POST'])
 def comment():
 
@@ -156,6 +162,7 @@ def comment():
 
     # Retorna para a visualização do artigo
     return redirect(url_for('view', artid=form['id'], ac='commented'))
+
 
 # Verifica se o script está sendo executado diretamente
 if __name__ == '__main__':
