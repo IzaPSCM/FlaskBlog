@@ -1,10 +1,10 @@
 # Importa a classe Flask do módulo flask
 from flask import Flask, redirect, render_template, request, url_for
 # Importa a bilbioteca de acesso ao MySQL
-from flask_mysqldb import MySQL, MySQLdb
+from flask_mysqldb import MySQL
 # Importa todas funções dos artigos de `db_articles`
 from functions.db_articles import *
-from functions.db_comments import save_comment
+from functions.db_comments import *
 from functions.db_contacts import save_contact
 
 # Cria uma instância da aplicação Flask
@@ -89,12 +89,23 @@ def view(artid):
     # Primeiro nome do autor
     article['sta_firstname'] = article['sta_name'].split()[0]
 
+    # Obtém todos os comentários do artigo
+    comments = get_all_comments(mysql, article['art_id'])
+
+    # Total de comentários
+    total_comments = len(comments)
+
+    # DEBUG → Comentários
+    # print('\n\n\n', comments, '\n\n\n')
+
     toPage = {
         'title': '',
         'css': 'view.css',
         'article': article,     # Passa o artigo para a view.html
         'articles': articles,   # Lista de outros artigos do autor
-        'action': ac            # Feedback de envio do comentário
+        'action': ac,           # Feedback de envio do comentário
+        'comments': comments,   # Todos os comentários deste artigo
+        'total_comments': total_comments # Total de comentários
     }
 
     return render_template('view.html', page=toPage)
@@ -161,7 +172,7 @@ def comment():
     save_comment(mysql, form)
 
     # Retorna para a visualização do artigo
-    return redirect(url_for('view', artid=form['id'], ac='commented'))
+    return redirect(url_for('view', artid=form['id'], ac='commented') + '#comments')
 
 
 # Verifica se o script está sendo executado diretamente

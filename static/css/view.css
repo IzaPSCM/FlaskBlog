@@ -11,7 +11,7 @@
     display: block;
     width: 100%;
     max-width: 500px;
-    margin: auto;
+    margin: auto auto 2rem auto;
 }
 
 #commentForm label {
@@ -74,7 +74,24 @@
     font-weight: bold;
 }
 
-.comments {
+#comments {
     margin-top: 3rem;
     border-top: 3px dotted grey;
+}
+
+.comment-item {
+    border: 1px dotted #ddd;
+    margin-bottom: 1rem;
+}
+
+.comment-header {
+    padding: .25rem;
+    font-size: small;
+    border-bottom: 1px dotted #bbb;
+    background-color: #ddd;
+}
+
+.comment-body {
+    padding: .5rem;
+    background-color: #eee;
 }

@@ -11,7 +11,7 @@
 
 {{ page.article.art_content | safe }}
 
-<div class="comments">
+<div id="comments">
 
     <h3>Comentários</h3>
 
@@ -47,9 +47,44 @@
 
     </form>
 
+    {% if page.total_comments == 0 %}
 
+    <h3>Nenhum comentário</h3>
+    <p class="center">Seja o primeiro a comentar!</p>
+
+    {% else %}
+
+    {% if page.total_comments == 1 %}
+
+    <h3>{{ page.total_comments }} Comentário</h3>
+
+    {% else %}
+
+    <h3>{{ page.total_comments }} Comentários</h3>
+
+    {% endif %}
+
+    <div class="comment-grid">
+
+        {% for comment in page.comments %}
+
+        <div class="comment-item">
+            <div class="comment-header">
+                Por {{ comment.com_author_name }}
+                em {{ comment.com_datebr }}
+            </div>
+            <div class="comment-body">{{ comment.com_comment }}</div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
 
 </div>
+
+&nbsp;
 
 {% endblock%}
 
