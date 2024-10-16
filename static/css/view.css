@@ -1,0 +1,61 @@
+/* CSS de view.html */
+
+.aside-author img {
+    width: 100%;
+    max-width: 280px;
+    display: block;
+    margin: auto;
+}
+
+#commentForm {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+#commentForm label {
+    display: block;
+    padding: 0 0 .25rem .25rem;
+}
+
+#commentForm input,
+#commentForm textarea,
+#commentForm button {
+    font-family: inherit;
+    font-size: inherit;
+    border-radius: .3rem;
+}
+
+#commentForm input,
+#commentForm textarea {
+    width: 100%;
+    padding: .5rem;
+    border: 1px solid red;
+    background-color: rgb(255, 232, 232);    
+}
+
+#commentForm textarea {
+    resize: vertical;
+    height: 6rem;
+}
+
+#commentForm button {
+    padding: .5rem 1rem;
+    color: white;
+    background-color: grey;
+    border: none;
+    pointer-events: none;
+}
+
+#commentForm input:valid,
+#commentForm textarea:valid {
+    border: 1px solid blue;
+    background-color: rgb(232, 240, 254);
+}
+
+#commentForm:valid button {
+    background-color: steelblue;
+    pointer-events: all;
+    cursor: pointer;
+}

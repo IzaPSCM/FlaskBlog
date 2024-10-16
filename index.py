@@ -5,8 +5,6 @@ from flask_mysqldb import MySQL, MySQLdb
 # Importa todas funções dos artigos de `db_articles`
 from functions.db_articles import *
 from functions.db_contacts import save_contact
-# Envio de e-mails
-from flask_mail import Mail, Message
 
 # Cria uma instância da aplicação Flask
 app = Flask(__name__)
@@ -17,18 +15,8 @@ app.config['MYSQL_USER'] = 'root'       # Nome de usuário do MySQL
 app.config['MYSQL_PASSWORD'] = ''       # Senha do usuário do MySQL
 app.config['MYSQL_DB'] = 'flaskblogdb'  # Nome do banco de dados
 
-# Dados do SMTP
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'jocadasilvajoquinha@gmail.com'
-app.config['MAIL_PASSWORD'] = 'sua_senha'
-
 # Conecta o Python ao MySQL → `mysql` é a conexão com o banco de dados
 mysql = MySQL(app)
-
-# Cria o objeto de e-mail
-mail = Mail(app)
 
 ########################
 # Tratamento das rotas #
@@ -94,6 +82,9 @@ def view(artid):
         case _:
             article['sta_typebr'] = 'Colaborador'
 
+    # Primeiro nome do autor
+    article['sta_firstname'] = article['sta_name'].split()[0]
+
     toPage = {
         'title': '',
         'css': 'view.css',
@@ -128,18 +119,6 @@ def contacts():  # Função executada quando '/contacts' é acessado
         # Obtém o primeiro nome do remetente
         first = form['name'].split()[0]
 
-        # Envia e-mail para o ADM
-        subject = form['subject']
-        body = form['message']
-        recipient = 'admin@flaskblo.com'  # Destinatário
-
-        msg = Message(
-            subject, sender=app.config['MAIL_USERNAME'], recipients=[recipient])
-        msg.body = f'Olá Admin! \n\n Você recebeu um novo contato do site:\n\n{
-            body}'
-
-        mail.send(msg)
-
     # Variável da página HTML
     toPage = {
         'title': 'Faça contato',
@@ -162,6 +141,15 @@ def page_not_found(e):
     }
     return render_template('404.html', page=toPage), 404
 
+@app.route('/comment', methods=['POST'])
+def comment():
+
+    # Recebe dados do formulário
+    form = dict(request.form)
+
+    print('\n\n\n', form, '\n\n\n')
+
+    return 'foi'
 
 # Verifica se o script está sendo executado diretamente
 if __name__ == '__main__':
