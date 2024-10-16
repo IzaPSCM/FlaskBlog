@@ -1,9 +1,10 @@
 # Importa a classe Flask do módulo flask
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, url_for
 # Importa a bilbioteca de acesso ao MySQL
 from flask_mysqldb import MySQL, MySQLdb
 # Importa todas funções dos artigos de `db_articles`
 from functions.db_articles import *
+from functions.db_comments import save_comment
 from functions.db_contacts import save_contact
 
 # Cria uma instância da aplicação Flask
@@ -147,9 +148,14 @@ def comment():
     # Recebe dados do formulário
     form = dict(request.form)
 
-    print('\n\n\n', form, '\n\n\n')
+    # Teste de mesa
+    # print('\n\n\n', form, '\n\n\n')
 
-    return 'foi'
+    # Salva o comentário
+    save_comment(mysql, form)
+
+    # Retorna para a visualização do artigo
+    return redirect(url_for('view', artid=form['id'], ac='commented'))
 
 # Verifica se o script está sendo executado diretamente
 if __name__ == '__main__':
