@@ -59,3 +59,22 @@
     pointer-events: all;
     cursor: pointer;
 }
+
+.alert {
+    color: red;
+    font-style: italic;
+    text-align: center;
+}
+
+.sended {
+    background-color: rgb(232, 255, 232);
+    color: rgb(0, 78, 0);
+    text-align: center;
+    padding: .5rem;
+    font-weight: bold;
+}
+
+.comments {
+    margin-top: 2rem;
+    border-top: 3px dotted grey;
+}
