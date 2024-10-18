@@ -90,3 +90,21 @@ def update_views(mysql, artid): # Atualiza as visualizações do artigo
     cur.close()
 
     return True
+
+
+def most_viewed(mysql, limit = 4):
+
+    sql = '''
+        SELECT art_id, art_title, art_thumbnail
+        FROM article 
+        WHERE art_status = 'on'
+            AND art_date <= NOW()
+        ORDER BY art_views DESC
+        LIMIT %s
+    '''
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cur.execute(sql, (limit,))
+    articles = cur.fetchall()
+    cur.close()
+
+    return articles
