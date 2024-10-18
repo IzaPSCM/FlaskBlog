@@ -38,6 +38,9 @@ def home():  # Função executada quando '/' é acessado
     # Obtém artigos mais visualizados
     article_viewed = most_viewed(mysql)
 
+    # Obtém artigos mais comentados
+    articles_commented = most_commented(mysql)
+
     # Variável da página HTML
     toPage = {
         # Valor da tag <title> → Título da página
@@ -49,7 +52,9 @@ def home():  # Função executada quando '/' é acessado
         # Outros pares "chave" : "valor" entram aqui
         'articles': articles,
         # Artigos mais visualizados
-        'article_viewed': article_viewed
+        'article_viewed': article_viewed,
+        # Artigos mais comentados
+        'articles_commented': articles_commented
     }
 
     # Abre a página de template → layout.html
