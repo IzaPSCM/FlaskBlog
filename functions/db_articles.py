@@ -144,3 +144,35 @@ def most_commented(mysql, limit=4):  # Os artigos mais comentados
     cur.close()
 
     return articles
+
+
+# Obtém os artigos pesquisados pelo termo 'query'
+def search_articles(mysql, query, limit=0):
+
+    # Se 'limit == 0'
+    if limit == 0:
+        # Não aplica limite
+        subsql = ''
+    else:
+        # Aplico o limite definido
+        subsql = f'LIMIT {limit}'
+
+    sql = f'''
+        SELECT art_id, art_title, art_resume, art_thumbnail
+        FROM article
+        WHERE
+            (art_resume LIKE %s
+            OR art_content LIKE %s)
+            AND art_status = 'on'
+            AND art_date <= NOW()
+        ORDER BY art_date DESC
+        {subsql}
+    '''
+    # Monta o termo de busca para LIKE
+    like_term = f'%{query}%'
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cur.execute(sql, (like_term, like_term,))
+    articles = cur.fetchall()
+    cur.close()
+
+    return articles

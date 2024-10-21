@@ -209,12 +209,32 @@ def contacts():  # Função executada quando '/contacts' é acessado
     return resp
 
 
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('q')
+
+    # print('\n\n\n', query, '\n\n\n')
+
+    articles = search_articles(mysql, query)
+
+    print('\n\n\n', articles, '\n\n\n')
+
+    toPage = {
+        'title': 'Procurar',
+        'css': 'search.css',
+        'articles': articles,
+        'query': query
+    }
+
+    return render_template('search.html', page=toPage)
+
+
 @app.errorhandler(404)  # Manipula o erro 404
 def page_not_found(e):
 
     articles = get_all(mysql, 4)
 
-    print('\n\n\n', articles, '\n\n\n')
+    # print('\n\n\n', articles, '\n\n\n')
 
     toPage = {
         'title': 'Erro 404',
