@@ -162,7 +162,8 @@ def search_articles(mysql, query, limit=0):
         FROM article
         WHERE
             (art_resume LIKE %s
-            OR art_content LIKE %s)
+            OR art_content LIKE %s
+            OR art_title LIKE %s)
             AND art_status = 'on'
             AND art_date <= NOW()
         ORDER BY art_date DESC
@@ -171,7 +172,7 @@ def search_articles(mysql, query, limit=0):
     # Monta o termo de busca para LIKE
     like_term = f'%{query}%'
     cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cur.execute(sql, (like_term, like_term,))
+    cur.execute(sql, (like_term, like_term, like_term,))
     articles = cur.fetchall()
     cur.close()
 
