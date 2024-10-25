@@ -1,4 +1,5 @@
 # Importa a classe Flask do módulo flask
+import os
 from flask import Flask, json, make_response, redirect, render_template, request, url_for
 # Importa a bilbioteca de acesso ao MySQL
 from flask_mysqldb import MySQL
@@ -13,11 +14,19 @@ from datetime import datetime, timedelta
 # Cria uma instância da aplicação Flask
 app = Flask(__name__)
 
+
+# Detecta o ambiente e carrega as configurações apropriadas
+if os.getenv('FLASK_ENV') == 'production':
+    import config_production as config
+else:
+    import config_local as config
+
 # Dados de conexão
-app.config['MYSQL_HOST'] = 'localhost'  # Endereço do servidor MySQL
-app.config['MYSQL_USER'] = 'root'       # Nome de usuário do MySQL
-app.config['MYSQL_PASSWORD'] = ''       # Senha do usuário do MySQL
-app.config['MYSQL_DB'] = 'flaskblogdb'  # Nome do banco de dados
+app.config['MYSQL_HOST'] = config.MYSQL_HOST
+app.config['MYSQL_USER'] = config.MYSQL_USER
+app.config['MYSQL_PASSWORD'] = config.MYSQL_PASSWORD
+app.config['MYSQL_DB'] = config.MYSQL_DB
+
 
 # Conecta o Python ao MySQL → `mysql` é a conexão com o banco de dados
 mysql = MySQL(app)
