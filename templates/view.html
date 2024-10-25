@@ -1,0 +1,130 @@
+{% extends "layout.html" %}
+
+{% block article %}
+
+{# Exibe o título do artigo #}
+<h2>{{ page.article.art_title }}</h2>
+
+<div class="author-date">
+    Por {{ page.article.sta_name }} em {{ page.article.art_datebr }}
+</div>
+
+{{ page.article.art_content | safe }}
+
+<div id="comments">
+
+    <h3>Comentários</h3>
+
+    {% if page.action == 'commented' %}
+    <div class="sended">
+        Seu comentário foi enviado com sucesso!
+    </div>
+    {% endif %}
+
+    <p>Preencha todos os campos abaixo para comentar.</p>
+    <p class="alert">Todos os campos são obrigatórios!</p>
+    <form action="/comment" method="post" id="commentForm">
+
+        <input type="hidden" name="id" value="{{ page.article.art_id }}">
+
+        <p>
+            <label for="name">Nome:</label>
+            <input type="text" name="name" id="name" value="{{ page.user_data.name }}" required minlength="3">
+        </p>
+
+        <p>
+            <label for="email">E-mail:</label>
+            <input type="email" name="email" id="email" value="{{ page.user_data.email }}" required>
+        </p>
+
+        <p>
+            <textarea name="comment" required minlength="5"></textarea>
+        </p>
+
+        <p>
+            <button type="submit">Enviar</button>
+        </p>
+
+    </form>
+
+    {% if page.total_comments == 0 %}
+
+    <h3>Nenhum comentário</h3>
+    <p class="center">Seja o primeiro a comentar!</p>
+
+    {% else %}
+
+    {% if page.total_comments == 1 %}
+
+    <h3>{{ page.total_comments }} Comentário</h3>
+
+    {% else %}
+
+    <h3>{{ page.total_comments }} Comentários</h3>
+
+    {% endif %}
+
+    <div class="comment-grid">
+
+        {% for comment in page.comments %}
+
+        <div class="comment-item">
+            <div class="comment-header">
+                Por {{ comment.com_author_name }}
+                em {{ comment.com_datebr }}
+            </div>
+            <div class="comment-body">{{ comment.com_comment }}</div>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+&nbsp;
+
+{% endblock%}
+
+{% block aside %}
+
+{# Perfil do autor do artigo #}
+
+<div class="aside-author">
+
+    <h3>{{ page.article.sta_name }}</h3>
+    <img src="{{ page.article.sta_image }}" alt="{{ page.article.sta_name }}">
+    <ul>
+        <li>{{ page.article.sta_age }} anos</li>
+        <li>{{ page.article.sta_typebr }}</li>
+    </ul>
+    <small>{{ page.article.sta_description }}</small>
+
+</div>
+
+{# Se tem mais artigos, lista aqui #}
+
+{% if page.articles != () %}
+
+&nbsp;
+
+<h3><i class="fa-solid fa-plus fa-fw"></i> Artigos de {{ page.article.sta_firstname }}</h3>
+
+<div class="aside-grid">
+
+    {% for article in page.articles %}
+
+    <div class="aside-article" onclick="location.href = '/view/{{ article.art_id }}'">
+        <img src="{{ article.art_thumbnail }}" alt="{{ article.art_title }}">
+        <div>{{ article.art_title }}</div>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}
